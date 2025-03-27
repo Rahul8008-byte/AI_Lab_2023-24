@@ -1,44 +1,74 @@
-# Ex.No: 3  Implementation of Minimax Search
-### DATE: 10.02.2025                                                                         
+# Ex.No: 4   Implementation of Alpha Beta Pruning 
+### DATE: 10.02.2025                                                                           
 ### REGISTER NUMBER : 212221060202
 ### AIM: 
-Write a mini-max search algorithm to find the optimal value of MAX Player from the given graph.
-### Algorithm:
+Write a Alpha beta pruning algorithm to find the optimal value of MAX Player from the given graph.
+### Steps:
 1. Start the program
-2. import the math package
-3. Specify the score value of leaf nodes and find the depth of binary tree from leaf nodes.
-4. Define the minimax function
-5. If maximum depth is reached then get the score value of leaf node.
-6. Max player find the maximum value by calling the minmax function recursively.
-7. Min player find the minimum value by calling the minmax function recursively.
-8. Call the minimax function  and print the optimum value of Max player.
-9. Stop the program. 
+2. Initially  assign MAX and MIN value as 1000 and -1000.
+3.  Define the minimax function  using alpha beta pruning
+4.  If maximum depth is reached then return the score value of leaf node. [depth taken as 3]
+5.  In Max player turn, assign the alpha value by finding the maximum value by calling the minmax function recursively.
+6.  In Min player turn, assign beta value by finding the minimum value by calling the minmax function recursively.
+7.  Specify the score value of leaf nodes and Call the minimax function.
+8.  Print the best value of Max player.
+9.  Stop the program. 
 
 ### Program:
 ```
-import math
-def minimax (curDepth, nodeIndex, maxTurn, scores,targetDepth):
-    # base case : targetDepth reached
-    if (curDepth == targetDepth):
-        return scores[nodeIndex]
-    if (maxTurn):
-        return max(minimax(curDepth + 1, nodeIndex * 2,False, scores, targetDepth),
-                   minimax(curDepth + 1, nodeIndex * 2 + 1,
-                    False, scores, targetDepth))
-     
+# Initial values of Alpha and Beta
+MAX, MIN = 1000, -1000
+ 
+# Returns optimal value for current player
+#(Initially called for root and maximizer)
+def minimax(depth, nodeIndex, maximizingPlayer,
+            values, alpha, beta):
+  
+    # Terminating condition. i.e
+    # leaf node is reached
+    if depth == 3:
+        return values[nodeIndex]
+ 
+    if maximizingPlayer:
+      
+        best = MIN
+ 
+        # Recur for left and right children
+        for i in range(0, 2):
+             
+            val = minimax(depth + 1, nodeIndex * 2 + i,
+                          False, values, alpha, beta)
+            best = max(best, val)
+            alpha = max(alpha, best)
+ 
+            # Alpha Beta Pruning
+            if beta <= alpha:
+                break
+          
+        return best
+      
     else:
-        return min(minimax(curDepth + 1, nodeIndex * 2, True, scores, targetDepth),
-                   minimax(curDepth + 1, nodeIndex * 2 + 1,
-                     True, scores, targetDepth))
-     
-# Driver code
-scores = [3, 5, 2, 9, 12, 5, 23, 20]
-treeDepth = math.log(len(scores), 2) # calculate depth of node  log 8 (base 2) = 3)
-print("The optimal value is : ", end = "")
-  print(minimax(0, 0, True, scores, treeDepth))
+        best = MAX
+ 
+        # Recur for left and
+        # right children
+        for i in range(0, 2):
+          
+            val = minimax(depth + 1, nodeIndex * 2 + i,
+                            True, values, alpha, beta)
+            best = min(best, val)
+            beta = min(beta, best)
+ 
+            # Alpha Beta Pruning
+            if beta <= alpha:
+                break
+          
+        return best
+      
+values = [3, 5, 6, 9, 1, 2, 0, -1] 
+  print("The optimal value is :", minimax(0, 0, True, values, MIN, MAX)
+
 ```
-
-
 
 
 
@@ -48,9 +78,9 @@ print("The optimal value is : ", end = "")
 
 
 ### Output:
+![image](https://github.com/Rajithxx/AI_Lab_2023-24/assets/148357145/26e73048-2ec4-48e7-b19a-ffc3d29c3acf)
 
-![image](https://github.com/Rajithxx/AI_Lab_2023-24/assets/148357145/498ae52d-8016-425b-a9ad-94d2571b9a9c)
 
 
 ### Result:
-Thus the optimum value of max player was found using minimax search.
+Thus the best score of max player was found using Alpha Beta Pruning.
