@@ -1,63 +1,49 @@
-# Ex.No: 11  Planning –  Block World Problem 
-### DATE: 10.03.2025                                                                        
+# Ex.No: 1  Implementation of Breadth First Search
+### DATE: 03.02.2025                                                                          
 ### REGISTER NUMBER : 212221060202
 ### AIM: 
-To find the sequence of plan for Block word problem using PDDL  
-###  Algorithm:
-Step 1 :  Start the program <br>
-Step 2 : Create a domain for Block world Problem <br>
-Step 3 :  Create a domain by specifying predicates clear, on table, on, arm-empty, holding. <br>
-Step 4 : Specify the actions pickup, putdown, stack and un-stack in Block world problem <br>
-Step 5 :  In pickup action, Robot arm pick the block on table. Precondition is Block is on table and no other block on specified block and arm-hand empty.<br>
-Step 6:  In putdown action, Robot arm place the block on table. Precondition is robot-arm holding the block.<br>
-Step 7 : In un-stack action, Robot arm pick the block on some block. Precondition is Block is on another block and no other block on specified block and arm-hand empty.<br>
-Step 8 : In stack action, Robot arm place the block on under block. Precondition is Block holded by robot arm and no other block on under block.<br>
-Step 9 : Define a problem for block world problem.<br> 
-Step 10 : Obtain the plan for given problem.<br> 
-     
+To write a python program to implement Breadth first Search. 
+### Algorithm:
+1. Start the program
+2. Create the graph by using adjacency list representation
+3. Define a function dfs and take the set “visited” is empty 
+4. Search start with initial node. Check the node is not visited then print the node.
+5. For each neighbor node, recursively invoke the bfs search.
+6. Call the dfs function by passing arguments visited, graph and starting node.
+7. Stop the program.
 ### Program:
 ```
-(define (domain blocksworld)
-(:requirements :strips :equality)
-(:predicates (clear ?x)
-             (on-table ?x)
-             (arm-empty)
-             (holding ?x)
-             (on ?x ?y))
-(:action pickup
-  :parameters (?ob)
-  :precondition (and (clear ?ob) (on-table ?ob) (arm-empty))
-  :effect (and (holding ?ob) (not (clear ?ob)) (not (on-table ?ob)) 
-               (not (arm-empty))))
-(:action putdown
-  :parameters  (?ob)
-  :precondition (and (holding ?ob))
-  :effect (and (clear ?ob) (arm-empty) (on-table ?ob) 
-               (not (holding ?ob))))
-(:action stack
-  :parameters  (?ob ?underob)
-  :precondition (and  (clear ?underob) (holding ?ob))
-  :effect (and (arm-empty) (clear ?ob) (on ?ob ?underob)
-               (not (clear ?underob)) (not (holding ?ob))))
-(:action unstack
-  :parameters(?ob?underob)
-  :precondition (and (on ?ob ?underob) (clear ?ob) (arm-empty))
-  :effect (and (holding ?ob) (clear ?underob)
-               (not (on ?ob ?underob)) (not (clear ?ob)) (not (arm-empty)))))
-```
+graph={
+    '2':['3','4'],
+    '3':['5'],
+    '4':['6','7'],
+    '6':[ ],
+    '5':['6'],
+    '7':['8'],
+    '8':[ ]
+}
+visited=[]
+queue=[]
+def bfs(visted,node,graph):
+    visited.append(node)
+    queue.append(node)
+    while queue:
+        m=queue.pop(0)
+        print(m)
+        for neighbour in graph[m]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
+print("BFS order is")
+bfs(visited,'2',graph)
 
-### Input 
 ```
-(define (problem pb1)
-   (:domain blocksworld)
-   (:objects a b)
-   (:init (on-table a) (on-table b)  (clear a)  (clear b) (arm-empty))
-   (:goal (and(onab))))
-```
-### Output/Plan:
+### Output:
 
-![WhatsApp Image 2024-03-30 at 10 59 20_fcf5339d](https://github.com/Rajithxx/AI_Lab_2023-24/assets/148357145/0e76bb43-cd61-496a-b11a-1677ad5cd395)
+
+![image](https://github.com/Rajithxx/AI_Lab_2023-24/assets/148357145/3d77ccbe-9b4e-4245-972f-bb262bd232d1)
 
 
 ### Result:
-Thus the plan was found for the initial and goal state of block world problem.
+Thus the breadth first search order was found sucessfully.
+
